@@ -15,7 +15,8 @@ async function createProductAndPrice(item) {
       type: 'service', 
     });
 
-    const unitAmount = Math.round(item.Total * 10);
+    const unitAmount = Math.round((item.Price + item.Tax) * 100);
+    
 
     const price = await stripe.prices.create({
       product: product.id,
@@ -69,18 +70,7 @@ app.post('/create-checkout-session', async (req, res) => {
       mode: 'payment',
       success_url: 'https://catchyfive.com/success', 
       cancel_url: 'https://catchyfive.com/failed', 
-      // customer: CustomerId,
       submit_type: 'auto',
-      // metadata: {
-      //   OrderDate,
-      //   CustomerName,
-      //   CustomerAddress,
-      //   PostalCode,
-      //   Total,
-      //   NetTotal,
-      //   PaymentType,
-      //   OrderDetail: JSON.stringify(OrderDetail),
-      // },
       currency: 'SGD', 
     });
     
