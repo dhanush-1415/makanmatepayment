@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 app.use(cors()); 
 
 async function createProductAndPrice(item) {
+
   try {
     const product = await stripe.products.create({
       name: item.ProductName,
@@ -32,17 +33,29 @@ async function createProductAndPrice(item) {
 }
 
 
+async function createShippingPrice(shippingCost) {
+  try {
+    const shippingPrice = await stripe.prices.create({
+      unit_amount: Math.round(shippingCost * 100),
+      currency: 'SGD',
+      product_data: {
+        name: 'Shipping Cost',
+        type: 'service',
+      },
+    });
+
+    return shippingPrice.id;
+  } catch (error) {
+    console.error('Error creating shipping price:', error);
+    throw error;
+  }
+}
+
+
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const {
-      OrderDate,
-      CustomerId,
-      CustomerName,
-      CustomerAddress,
-      PostalCode,
-      Total,
-      NetTotal,
-      PaymentType,
+      ShippingCost,
       OrderDetail,
     } = req.body[0].products;
 
@@ -63,6 +76,14 @@ app.post('/create-checkout-session', async (req, res) => {
         quantity: item.Qty,
       };
     });
+
+    if (ShippingCost > 0) {
+      const shippingPriceId = await createShippingPrice(ShippingCost);
+      lineItems.push({
+        price: shippingPriceId,
+        quantity: 1,
+      });
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
