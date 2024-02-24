@@ -57,6 +57,7 @@ app.post('/create-checkout-session', async (req, res) => {
     const {
       ShippingCost,
       OrderDetail,
+      url,
     } = req.body[0].products;
 
     if (!Array.isArray(OrderDetail)) {
@@ -89,8 +90,8 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: 'https://catchyfive.com/success', 
-      cancel_url: 'https://catchyfive.com/failed', 
+      success_url: url === 'makanmate' ? 'https://makanmate.com/order/success' : 'https://catchyfive.com/success',
+      cancel_url: url === 'makanmate' ? 'https://catchyfive.com/order/failed' : 'https://catchyfive.com/failed',
       submit_type: 'auto',
       currency: 'SGD', 
     });
