@@ -91,7 +91,7 @@ app.post('/create-checkout-session', async (req, res) => {
       line_items: lineItems,
       mode: 'payment',
       success_url: url === 'makanmate' ? 'https://makanmate.com/order/success' : 'https://catchyfive.com/success',
-      cancel_url: url === 'makanmate' ? 'https://catchyfive.com/order/failed' : 'https://catchyfive.com/failed',
+      cancel_url: url === 'makanmate' ? 'https://makanmate.com/order/failed' : 'https://catchyfive.com/failed',
       submit_type: 'auto',
       currency: 'SGD', 
     });
