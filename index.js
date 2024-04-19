@@ -73,6 +73,8 @@ app.post('/create-checkout-session', async (req, res) => {
       currency: 'SGD', 
     });
 
+    console.log(session)
+
     res.json({ sessionId: session.id , sessionUrl : session.url });
   } catch (error) {
     console.error('Error in create-checkout-session:', error);
