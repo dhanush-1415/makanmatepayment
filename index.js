@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const stripe = require('stripe')('sk_test_51N00U8FFReMpJzWzW0k62c5BgKrjWNJaFnu3DHoO8PUOKie0XyHlJBwVKQaLPsORqJ9udcg2RDWNlbqExcrDxecF00uNWboKYU');
+const stripe = require('stripe')('sk_test_51HPOEBJ42ylRHBRW3xzrkSSRa1NDJfIJDPqjaxnpHAUShXHgTkoLCA6JF7ka5HFgckaTIIz1WgQcdnR4baS9FInF00EXjFpwY7');
 const cors = require('cors'); 
 
 const app = express();
@@ -73,7 +73,7 @@ app.post('/create-checkout-session', async (req, res) => {
       currency: 'SGD', 
     });
 
-    res.json({ sessionId: session.id });
+    res.json({ sessionId: session.id , sessionUrl : session.url });
   } catch (error) {
     console.error('Error in create-checkout-session:', error);
     res.status(500).json({ error: error.message });
